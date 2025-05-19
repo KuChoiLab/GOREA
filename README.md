@@ -29,8 +29,8 @@ library(simplifyEnrichment)
 library(ComplexHeatmap)
 library(org.Hs.eg.db) # human
 
-setwd("/Users/hojin/Dropbox/project/GOREA/20250401/human/")
-source("/Users/hojin/Dropbox/project/GOREA/20250401/human/20250401_gorea_function_human_hj.R")
+setwd("path to GOREA/GOREA/20250401/human/")
+source("path to GOREA/GOREA/20250401/human/20250401_gorea_function_human_hj.R")
 
 # 1. Setting environment for analysis ----
 
