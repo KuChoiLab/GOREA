@@ -1,6 +1,5 @@
 # GOREA
-### This tool is for summarizing GOBP and extracting meaningful biological context.
-
+### A Framework for Systematic and Unbiased Interpretation of Gene Ontology Enrichment
 ## Key algorithm for GOREA
 <img width="830" alt="image" src="https://github.com/user-attachments/assets/17632e57-f23a-41e7-b8ee-aa371045a855" />
 
