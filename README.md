@@ -47,8 +47,7 @@ test <- sample(GOID_TERM$GOID, 500, replace = F)
 input_df <- data.frame(GOID = test)
 input_df$NES <- sample(seq(0.1, 4, 0.01), replace = T, size = nrow(input_df))
 
-head(input_df)![image](https://github.com/user-attachments/assets/8afb18de-7022-4ba9-a7ad-64df5653cc10)
-![image](https://github.com/user-attachments/assets/0e8df5f1-11c8-4090-a059-1316cfb6fdfc)
+head(input_df)
 
 ## example ##
 #  GOID  NES
