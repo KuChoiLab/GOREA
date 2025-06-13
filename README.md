@@ -70,7 +70,7 @@ gorea_outlier_plot(w = w)
 # top_ancestor_annotation; for general description, top panel for broad GOBP terms is implemented.
 # top_ancestor_annotation_number; clustered broad GO terms will be split according to this number. and the high ranked broad GO terms based on the number of input GOBP terms as child terms for each cluster can be illustrated in the top panel. 
 res <- gorea(input = input_df,
-             k_val = 10, # considering your total number of GOBP terms.
+             k_val = 20, # considering your total number of GOBP terms.
              godata_GO = godata_GO,
              cutoff = 0.85, # default (you can change this value, according to the results from gorea_outlier_plot function)
              outlier_detect = T,
@@ -91,7 +91,8 @@ res <- gorea(input = input_df,
 ```
 
 ## Real example for GOREA analysis
-<img width="1093" alt="image" src="https://github.com/user-attachments/assets/48ac6b32-1cc1-4c67-b243-6392b434f26f" />
+<img width="1249" alt="image" src="https://github.com/user-attachments/assets/3dd9eef9-8459-44e1-85a5-131c88a5a369" />
+
 
 ## Reference
 1. Gu, Zuguang, and Daniel Hübschmann. "simplifyEnrichment: a Bioconductor package for clustering and visualizing functional enrichment results." Genomics, Proteomics & Bioinformatics 21.1 (2023): 190-202.
