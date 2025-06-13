@@ -24,7 +24,6 @@ library(plyr)
 library(fgsea)
 library(tibble)
 library(ggplot2)
-library(GO.db)
 library(GOSemSim)
 library(WriteXLS)
 library(colorRamp2)
@@ -50,13 +49,13 @@ input_df$NES <- sample(seq(0.1, 4, 0.01), replace = T, size = nrow(input_df))
 head(input_df)
 
 ## example ##
-#  GOID  NES
-#1  GO:2003414  2.23
-#2  GO:1355452  2.21
-#3  GO:1359592  1.09
-#4  GO:1249099  1.92
-#5  GO:1234991  1.35
-#6  GO:1002482  1.53
+# GOID  NES
+# 1 GO:0071674 1.29
+# 2 GO:0031110 3.55
+# 3 GO:0007266 3.92
+# 4 GO:0046112 2.65
+# 5 GO:1903911 2.08
+# 6 GO:0048670 1.93
 
 ## 2.2 outlier plot (additional step) ----
 # before starting clustering steps, you can check a plot for the number of small clusters depending on cutoff (the cutoff is the value that you can assign in the gorea function as a parameter)
