@@ -67,7 +67,9 @@ gorea_outlier_plot(w = w)
 # k_val; when increasing this value, the number of cluster is increased.
 # cutoff; if you want to remove broad amount of small clusters, decrease this cutoff. but, according to simplifyenrichment, 0.85 is a default value. 
 # top_ancestor_annotation; for general description, top panel for broad GOBP terms is implemented.
-# top_ancestor_annotation_number; clustered broad GO terms will be split according to this number. and the high ranked broad GO terms based on the number of input GOBP terms as child terms for each cluster can be illustrated in the top panel. 
+# top_ancestor_annotation_number; clustered broad GO terms will be split according to this number. and the high ranked broad GO terms based on the number of input GOBP terms as child terms for each cluster can be illustrated in the top panel.
+# filename1; this file includes total input GOBP terms and assigned ACNESTOR terms for each GOBP term.
+# filename2; ㅅhis file includes representative terms (referred to as ANCESTOR terms), and among them, the ones associated with the largest GOBP terms are displayed in the result plot.
 res <- gorea(input = input_df,
              k_val = 20, # considering your total number of GOBP terms.
              godata_GO = godata_GO,
