@@ -32,11 +32,11 @@ library(ComplexHeatmap)
 library(org.Hs.eg.db) # human
 
 setwd("output path")
-source("path to GOREA/GOREA/human/20250603_gorea_function_human_hj.R")
+source("path to GOREA/GOREA/human/gorea_function_human_GOBP_v2025.1_v1.1.R")
 
 # 1. Setting environment for analysis ----
 
-localdir <- "/Users/hojin/Dropbox/project/GOREA/20250603/" # this directory has to be parents directory of GeneOntology directory
+localdir <- "/Users/hojin/Dropbox/project/GOREA/v1.1/v2025.1" # this directory has to be parents directory of GeneOntology directory
 gorea_enviromnet(localdir)
 
 # 2. example ---
