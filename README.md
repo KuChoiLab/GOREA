@@ -120,7 +120,7 @@ gorea_enviromnet(localdir)
 
 # 2. fgsea ----
 
-res <- readRDS("res_B_cell_MAST_fixed_donor_hj.rds") # DE test results
+res <- readRDS("res_B_cell_MAST_fixed_donor_hj.rds") # DE test results from seurat findmarkers().
 res$gene <- rownames(res)
 df <- res %>% mutate(statistics = qnorm(p_val/2, lower.tail=F) * sign(avg_log2FC),
                       max_statistics_second = max(statistics[statistics != Inf]),
