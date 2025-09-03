@@ -94,6 +94,107 @@ res <- gorea(input = input_df,
 ## Real example for GOREA analysis
 <img width="1249" alt="image" src="https://github.com/user-attachments/assets/3dd9eef9-8459-44e1-85a5-131c88a5a369" />
 
+## From fgsea to GOREA (Human)
+```
+library(dplyr)
+library(plyr)
+library(fgsea)
+library(tibble)
+library(ggplot2)
+library(GOSemSim)
+library(WriteXLS)
+library(colorRamp2)
+library(simplifyEnrichment)
+library(ComplexHeatmap)
+library(org.Hs.eg.db)
+library(fgsea)
+library(tibble)
+
+setwd("output path")
+source("path to GOREA/GOREA/human/gorea_function_human_GOBP_v2025.1_v1.2.R")
+
+# 1. Setting environment for analysis ----
+
+localdir <- "/Users/hojin/Dropbox/project/GOREA/v1.2/v2025.1" # this directory has to be parents directory of GeneOntology directory
+gorea_enviromnet(localdir)
+
+# 2. fgsea ----
+res <- readRDS("res_B_cell_MAST_fixed_donor_hj.rds") # DE test results
+res$gene <- rownames(res)
+df <- res %>% mutate(statistics = qnorm(p_val/2, lower.tail=F) * sign(avg_log2FC),
+                      max_statistics_second = max(statistics[statistics != Inf]),
+                      min_statistics_second = min(statistics[statistics != -Inf]),
+                      statistics_corrected = ifelse(statistics == Inf, max_statistics_second + 1,
+                                                    ifelse(statistics == -Inf,
+                                                           min_statistics_second - 1,statistics)))
+
+df <- df %>% dplyr::select(gene, statistics_corrected)
+set.seed(1234); ranks <- deframe(df) # rank
+
+pw <- gmtPathways("/Users/hojin/Dropbox/db/c5.go.bp.v2025.1.Hs.symbols.gmt") # load GOBP (msigDB) file for fgsea
+
+set.seed(1234); fgseaRes <- fgseaMultilevel(pathways = pw, stats = ranks, minSize = 15, maxSize = 500) # run fgsea
+fgseaRes <- as.data.frame(fgseaRes) 
+fgseaRes_final_df <- data.frame()
+for (i in seq(1:nrow(fgseaRes))) {
+  fgseaRes_final_df_tmp <- fgseaRes[i,]
+  leading_edges_tmp <- fgseaRes[i,]$leadingEdge %>% unlist()
+  fgseaRes_final_df_tmp$leadingEdge <- paste(leading_edges_tmp, collapse = "/")
+  
+  fgseaRes_final_df <- rbind(fgseaRes_final_df, fgseaRes_final_df_tmp)
+}
+
+# seperate fgsea results
+test1 <- fgseaRes_final_df %>% dplyr::filter(padj < 0.05) %>% dplyr::filter(NES > 0)
+test2 <- fgseaRes_final_df %>% dplyr::filter(padj < 0.05) %>% dplyr::filter(NES < 0)
+
+# When run "gorea_enviromnet(localdir)" command, GOID_TERM, which includes GOID and GO terms as a dataframe, is loaded.
+# using the GOID_TERM, GOID can be assigned to fgsea results (test1, test2).
+test1 <- merge(test1, GOID_TERM, by.x = "pathway", by.y = "GOTERM", all.x = T) 
+test1 <- test1 %>% dplyr::select(GOID, NES)
+test2 <- merge(test2, GOID_TERM, by.x = "pathway", by.y = "GOTERM", all.x = T)
+test2 <- test2 %>% dplyr::select(GOID, NES)
+
+res <- gorea(input = test1,
+             k_val = 10, # considering your total number of GOBP terms.
+             godata_GO = godata_GO,
+             cutoff = 0.85, # default (you can change this value, according to the results from gorea_outlier_plot function)
+             outlier_detect = T,
+             min_cluster = 3,
+             representative_term_level_cutoff = 1, GO_explain = 3,
+             score = "NES", # "NES" or "Overlap_freq"
+             filename1 = paste0(celltype_tmp, "_nes_pos_table1.xlsx"),
+             filename2 = paste0(celltype_tmp, "_nes_pos_table2.xlsx"),
+             heatmap_filename = paste0(celltype_tmp, "_nes_pos_plot.pdf"),
+             plot = T,
+             heatmap_width = 40, heatmap_height = 30,
+             ancestor_annotation = T,
+             right_annotation_font_size = 10,
+             cluster_font_size = 4,
+             top_ancestor_annotation = T,
+             top_ancestor_annotation_number = 3,
+             color = c("gold"))
+
+res <- gorea(input = test2,
+             k_val = 10, # considering your total number of GOBP terms.
+             godata_GO = godata_GO,
+             cutoff = 0.85, # default (you can change this value, according to the results from gorea_outlier_plot function)
+             outlier_detect = T,
+             min_cluster = 3,
+             representative_term_level_cutoff = 1, GO_explain = 3,
+             score = "NES", # "NES" or "Overlap_freq"
+             filename1 = paste0(celltype_tmp, "_nes_neg_table1.xlsx"),
+             filename2 = paste0(celltype_tmp, "_nes_neg_table2.xlsx"),
+             heatmap_filename = paste0(celltype_tmp, "_nes_neg_plot.pdf"),
+             plot = T,
+             heatmap_width = 40, heatmap_height = 30,
+             ancestor_annotation = T,
+             right_annotation_font_size = 10,
+             cluster_font_size = 4,
+             top_ancestor_annotation = T,
+             top_ancestor_annotation_number = 3,
+             color = c("gold"))
+```
 
 ## Reference
 1. Gu, Zuguang, and Daniel Hübschmann. "simplifyEnrichment: a Bioconductor package for clustering and visualizing functional enrichment results." Genomics, Proteomics & Bioinformatics 21.1 (2023): 190-202.
