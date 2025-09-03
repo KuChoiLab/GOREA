@@ -119,6 +119,7 @@ localdir <- "/Users/hojin/Dropbox/project/GOREA/v1.2/v2025.1" # this directory h
 gorea_enviromnet(localdir)
 
 # 2. fgsea ----
+
 res <- readRDS("res_B_cell_MAST_fixed_donor_hj.rds") # DE test results
 res$gene <- rownames(res)
 df <- res %>% mutate(statistics = qnorm(p_val/2, lower.tail=F) * sign(avg_log2FC),
@@ -154,6 +155,8 @@ test1 <- merge(test1, GOID_TERM, by.x = "pathway", by.y = "GOTERM", all.x = T)
 test1 <- test1 %>% dplyr::select(GOID, NES)
 test2 <- merge(test2, GOID_TERM, by.x = "pathway", by.y = "GOTERM", all.x = T)
 test2 <- test2 %>% dplyr::select(GOID, NES)
+
+# 3. gorea ----
 
 res <- gorea(input = test1,
              k_val = 10, # considering your total number of GOBP terms.
