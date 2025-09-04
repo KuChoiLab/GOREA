@@ -14,6 +14,9 @@ Note:
 
 The clustering results are displayed as a heatmap, with the representative terms shown on the right. On the right side of the heatmap, each cluster with its representative terms is ordered by singificance, based on either the average proportion of overlapping genes or the average absoulte value of the NES. To make more general observations about the resulting GOBP terms, we created a panel above the heatmap. First, we defined broad GOBP terms. Broad GOBP terms including input GOBP terms as their child term are clustered. For each cluster, the broad GOBP terms that contain the highest number of significant GOBP terms as their child term are selected and displayed. On the right side of the broad GOBP terms’ panel, the percentage of GOBP terms that each broad GOBP terms encompasses as child term are indicated.
 
+## Citation
+Hojin Lee, Young-in Park, Ina Jeon, Dawon Kang, Harim Chun, Jungmin Choi, https://github.com/KuChoiLab/GOREA
+
 ## Run GOREA (human)
 The following code is used to perform GOREA analysis.
 
