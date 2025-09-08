@@ -71,8 +71,9 @@ gorea_outlier_plot(w = w)
 # cutoff; if you want to remove broad amount of small clusters, decrease this cutoff. but, according to simplifyenrichment, 0.85 is a default value. 
 # top_ancestor_annotation; for general description, top panel for broad GOBP terms is implemented.
 # top_ancestor_annotation_number; clustered broad GO terms will be split according to this number. and the high ranked broad GO terms based on the number of input GOBP terms as child terms for each cluster can be illustrated in the top panel.
-# filename1; this file includes total input GOBP terms and assigned ACNESTOR terms for each GOBP term.
+# filename1; this file includes total input GOBP terms.
 # filename2; this file includes representative terms (referred to as ANCESTOR terms), and among them, the ones associated with the largest GOBP terms are displayed in the result plot.
+# filename3; users can examine the ancestor terms identified as representative terms along with their corresponding input GO terms.
 res <- gorea(input = input_df,
              k_val = 20, # considering your total number of GOBP terms.
              godata_GO = godata_GO,
@@ -83,6 +84,7 @@ res <- gorea(input = input_df,
              score = "NES", # "NES" or "Overlap_freq"
              filename1 = "testfile1.xlsx",
              filename2 = "testfile2.xlsx",
+             filename3 = "testfile3.xlsx",
              heatmap_filename = "testplot.png",
              plot = T,
              heatmap_width = 40, heatmap_height = 30,
@@ -92,6 +94,21 @@ res <- gorea(input = input_df,
              top_ancestor_annotation = T,
              top_ancestor_annotation_number = 3,
              color = c("gold"))
+
+# the file specified as filename3 can also be accessed in list format.
+cluster_numb <- 1
+ancestor_term <- "apoptotic process"
+res$gorea_summary_res$SummaryGO_3[[cluster_numb]][[ancestor_term]]
+
+#> res$gorea_summary_res$SummaryGO_3[[cluster_numb]][[ancestor_term]]
+## A tibble: 4 × 5
+#  ANCESTOR_GOID ANCESTOR_GOTERM   ANCESTOR_LEVEL CHILD_GOID CHILD_GOTERM                                                   
+#  <chr>         <chr>                      <int> <chr>      <chr>                                                          
+#1 GO:0006915    apoptotic process              4 GO:0097252 oligodendrocyte apoptotic process                              
+#2 GO:0006915    apoptotic process              4 GO:0006925 inflammatory cell apoptotic process                            
+#3 GO:0006915    apoptotic process              4 GO:1902742 apoptotic process involved in development                      
+#4 GO:0006915    apoptotic process              4 GO:0008630 intrinsic apoptotic signaling pathway in response to dna damage
+
 ```
 
 ## Real example for GOREA analysis
