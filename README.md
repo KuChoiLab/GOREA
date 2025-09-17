@@ -115,7 +115,7 @@ res$gorea_summary_res$SummaryGO_3[[cluster_numb]][[ancestor_term]]
 <img width="1249" alt="image" src="https://github.com/user-attachments/assets/3dd9eef9-8459-44e1-85a5-131c88a5a369" />
 
 ## From fgsea to GOREA (Human)
-```
+```R
 library(dplyr)
 library(plyr)
 library(fgsea)
