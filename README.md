@@ -219,6 +219,119 @@ res <- gorea(input = test2,
              color = c("gold"))
 ```
 
+## GOCC and GOMF
+To better understand the biological context, Gene Ontology Biological Process (GOBP) is commonly used by many users. However, some users may prefer to use Gene Ontology Molecular Function (GOMF) and Gene Ontology Cellular Component (GOCC). Therefore, we have enabled the analysis of GOMF and GOCC through the following code.
+
+```R
+### human tutorial ####
+library(dplyr)
+library(plyr)
+library(fgsea)
+library(tibble)
+library(ggplot2)
+library(GOSemSim)
+library(WriteXLS)
+library(colorRamp2)
+library(simplifyEnrichment)
+library(ComplexHeatmap)
+library(org.Hs.eg.db) # human
+
+### GOMF ###
+setwd("output path")
+source("path to GOREA/GOREA/human/gorea_function_human_GOMF_v2024.1_v1.4.R")
+
+# 1. Setting environment for analysis ----
+
+localdir <- "/Users/hojin/Dropbox/project/GOREA/v1.4/v2024.1/" # this directory has to be parents directory of GeneOntology directory
+gorea_gomf_enviromnet(localdir)
+
+# 2. example ---
+
+## 2.1 make test data ----
+test <- sample(GOID_TERM$GOID, 200, replace = F) 
+input_df <- data.frame(GOID = test)
+input_df$NES <- sample(seq(0.1, 4, 0.01), replace = T, size = nrow(input_df))
+
+head(input_df)
+
+## 2.2 outlier plot (additional step) ----
+# before starting clustering steps, you can check a plot for the number of small clusters depending on cutoff (the cutoff is the value that you can assign in the gorea function as a parameter)
+w <- gorea_sim_mat(input = input_df, godata_GO = godata_GO)
+
+gorea_outlier_plot(w = w)
+
+## 2.3 GOREA main function ----
+res <- gorea(input = input_df,
+             k_val = 15, # considering your total number of GOMF terms.
+             godata_GO = godata_GO,
+             cutoff = 0.85, # default (you can change this value, according to the results from gorea_outlier_plot function)
+             outlier_detect = T,
+             min_cluster = 3,
+             representative_term_level_cutoff = 1, GO_explain = 3,
+             score = "NES", # "NES" or "Overlap_freq"
+             filename1 = "gomf_testfile1.xlsx",
+             filename2 = "gomf_testfile2.xlsx",
+             filename3 = "gomf_testfile3.xlsx",
+             heatmap_filename = "gomf_testplot.png",
+             plot = T,
+             heatmap_width = 40, heatmap_height = 30,
+             ancestor_annotation = T,
+             right_annotation_font_size = 10,
+             cluster_font_size = 4,
+             top_ancestor_annotation = T,
+             top_ancestor_annotation_number = 3,
+             color = c("gold"))
+
+
+### GOCC ###
+setwd("output path")
+source("path to GOREA/GOREA/human/gorea_function_human_GOCC_v2024.1_v1.4.R")
+
+# 1. Setting environment for analysis ----
+
+localdir <- "/Users/hojin/Dropbox/project/GOREA/v1.4/v2024.1/" # this directory has to be parents directory of GeneOntology directory
+gorea_gocc_enviromnet(localdir)
+
+# 2. example ---
+
+## 2.1 make test data ----
+test <- sample(GOID_TERM$GOID, 200, replace = F) 
+input_df <- data.frame(GOID = test)
+input_df$NES <- sample(seq(0.1, 4, 0.01), replace = T, size = nrow(input_df))
+
+head(input_df)
+
+## 2.2 outlier plot (additional step) ----
+# before starting clustering steps, you can check a plot for the number of small clusters depending on cutoff (the cutoff is the value that you can assign in the gorea function as a parameter)
+w <- gorea_sim_mat(input = input_df, godata_GO = godata_GO)
+
+gorea_outlier_plot(w = w)
+
+## 2.3 GOREA main function ----
+res <- gorea(input = input_df,
+             k_val = 15, # considering your total number of GOCC terms.
+             godata_GO = godata_GO,
+             cutoff = 0.85, # default (you can change this value, according to the results from gorea_outlier_plot function)
+             outlier_detect = T,
+             min_cluster = 3,
+             representative_term_level_cutoff = 1, GO_explain = 3,
+             score = "NES", # "NES" or "Overlap_freq"
+             filename1 = "gocc_testfile1.xlsx",
+             filename2 = "gocc_testfile2.xlsx",
+             filename3 = "gocc_testfile3.xlsx",
+             heatmap_filename = "gocc_testplot.png",
+             plot = T,
+             heatmap_width = 40, heatmap_height = 30,
+             ancestor_annotation = T,
+             right_annotation_font_size = 10,
+             cluster_font_size = 4,
+             top_ancestor_annotation = T,
+             top_ancestor_annotation_number = 2,
+             color = c("gold"))
+
+```
+
+
 ## Reference
 1. Gu, Zuguang, and Daniel Hübschmann. "simplifyEnrichment: a Bioconductor package for clustering and visualizing functional enrichment results." Genomics, Proteomics & Bioinformatics 21.1 (2023): 190-202.
 2. Liberzon, Arthur, et al. "Molecular signatures database (MSigDB) 3.0." Bioinformatics 27.12 (2011): 1739-1740.
