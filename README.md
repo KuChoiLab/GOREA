@@ -218,7 +218,7 @@ res <- gorea(input = test2,
              color = c("gold"))
 ```
 
-## Example #3.Automatic optimal parameter
+## Example #3. Automatic Parameter Optimization
 GOREA provides automatic parameter selection for the clustering step. If specific values for cutoff and k_val are not specified, the algorithm performs clustering using optimized values determined based on the silhouette score.
 
 ```R
