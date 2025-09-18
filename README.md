@@ -17,7 +17,7 @@ The clustering results are displayed as a heatmap, with the representative terms
 ## Citation
 Hojin Lee, Young-in Park, Ina Jeon, Dawon Kang, Harim Chun, Jungmin Choi, https://github.com/KuChoiLab/GOREA
 
-## Run GOREA (human)
+## Example #1. Run GOREA (human)
 The following code is used to perform GOREA analysis.
 
 ```R
@@ -35,12 +35,12 @@ library(ComplexHeatmap)
 library(org.Hs.eg.db) # human
 
 setwd("output path")
-source("path to GOREA/GOREA/human/gorea_function_human_GOBP_v2025.1_v1.2.R")
+source("path to GOREA/GOREA/human/gorea_function_human_GOBP_v2025.1_v1.4.R")
 
 # 1. Setting environment for analysis ----
 
-localdir <- "/Users/hojin/Dropbox/project/GOREA/v1.2/v2025.1" # this directory has to be parents directory of GeneOntology directory
-gorea_enviromnet(localdir)
+localdir <- "/Users/hojin/Dropbox/project/GOREA/v1.4/v2025.1" # this directory has to be parents directory of GeneOntology directory
+gorea_gobp_enviromnet(localdir)
 
 # 2. example ---
 
@@ -110,11 +110,10 @@ res$gorea_summary_res$SummaryGO_3[[cluster_numb]][[ancestor_term]]
 #4 GO:0006915    apoptotic process              4 GO:0008630 intrinsic apoptotic signaling pathway in response to dna damage
 
 ```
-
-## Real example for GOREA analysis
+Output png file
 <img width="1249" alt="image" src="https://github.com/user-attachments/assets/3dd9eef9-8459-44e1-85a5-131c88a5a369" />
 
-## From fgsea to GOREA (Human)
+## Example #2.From fgsea to GOREA (Human)
 ```R
 library(dplyr)
 library(plyr)
@@ -219,8 +218,77 @@ res <- gorea(input = test2,
              color = c("gold"))
 ```
 
-## GOCC and GOMF
+## Example #3.Automatic optimal parameter
+GOREA provides automatic parameter selection for the clustering step. If specific values for cutoff and k_val are not specified, the algorithm performs clustering using optimized values determined based on the silhouette score.
+
+```R
+### human tutorial ####
+library(dplyr)
+library(plyr)
+library(fgsea)
+library(tibble)
+library(ggplot2)
+library(GOSemSim)
+library(WriteXLS)
+library(colorRamp2)
+library(simplifyEnrichment)
+library(ComplexHeatmap)
+library(org.Hs.eg.db) # human
+
+setwd("output path")
+source("path to GOREA/GOREA/human/gorea_function_human_GOBP_v2025.1_v1.4.R")
+
+# 1. Setting environment for analysis ----
+
+localdir <- "/Users/hojin/Dropbox/project/GOREA/v1.4/v2025.1" # this directory has to be parents directory of GeneOntology directory
+gorea_gobp_enviromnet(localdir)
+
+# 2. example ---
+
+## 2.1 make test data ----
+test <- sample(GOID_TERM$GOID, 500, replace = F) 
+input_df <- data.frame(GOID = test)
+input_df$NES <- sample(seq(0.1, 4, 0.01), replace = T, size = nrow(input_df))
+
+head(input_df)
+
+## 2.2 outlier plot (additional step) ----
+# before starting clustering steps, you can check a plot for the number of small clusters depending on cutoff (the cutoff is the value that you can assign in the gorea function as a parameter)
+w <- gorea_sim_mat(input = input_df, godata_GO = godata_GO)
+gorea_outlier_plot(w = w)
+
+## 2.3 GOREA main function ----
+# k_val; when increasing this value, the number of cluster is increased.
+# cutoff; if you want to remove broad amount of small clusters, decrease this cutoff. but, according to simplifyenrichment, 0.85 is a default value.
+
+res <- gorea(input = input_df,
+             k_val = NULL, # automatic
+             godata_GO = godata_GO,
+             cutoff = NULL, # automatic
+             outlier_detect = T,
+             min_cluster = 3,
+             representative_term_level_cutoff = 1, GO_explain = 3,
+             score = "NES", # "NES" or "Overlap_freq"
+             filename1 = "testfile1.xlsx",
+             filename2 = "testfile2.xlsx",
+             filename3 = "testfile3.xlsx",
+             heatmap_filename = "testplot.png",
+             plot = T,
+             heatmap_width = 40, heatmap_height = 30,
+             ancestor_annotation = T,
+             right_annotation_font_size = 10,
+             cluster_font_size = 4,
+             top_ancestor_annotation = T,
+             top_ancestor_annotation_number = 3,
+             color = c("gold"))
+
+
+```
+
+
+## Example #4.GOCC and GOMF
 To better understand the biological context, Gene Ontology Biological Process (GOBP) is commonly used by many users. However, some users may prefer to use Gene Ontology Molecular Function (GOMF) and Gene Ontology Cellular Component (GOCC). Therefore, we have enabled the analysis of GOMF and GOCC through the following code.
+
 
 ```R
 ### human tutorial ####
@@ -330,7 +398,6 @@ res <- gorea(input = input_df,
              color = c("gold"))
 
 ```
-
 
 ## Reference
 1. Gu, Zuguang, and Daniel Hübschmann. "simplifyEnrichment: a Bioconductor package for clustering and visualizing functional enrichment results." Genomics, Proteomics & Bioinformatics 21.1 (2023): 190-202.
