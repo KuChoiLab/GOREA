@@ -113,7 +113,7 @@ res$gorea_summary_res$SummaryGO_3[[cluster_numb]][[ancestor_term]]
 Output png file
 <img width="1249" alt="image" src="https://github.com/user-attachments/assets/3dd9eef9-8459-44e1-85a5-131c88a5a369" />
 
-## Example #2.From fgsea to GOREA (Human)
+## Example #2. From fgsea to GOREA (Human)
 ORA and GSEA have fundamentally different approaches that can yield different results. ORA operates on pre-filtered gene lists based on user-defined significance thresholds. This approach may identify significant terms even with small gene overlaps; however, the results depend heavily on the chosen cutoffs for differential expression. GSEA, by contrast, analyzes the entire ranked gene list without the use of arbitrary thresholds. This method is particularly effective at detecting coordinated but modest expression changes that ORA might miss. We recommend users choose GSEA output for unbiased, pathway-level interpretation of genome-wide patterns, especially when effects are subtle or distributed across many genes, or choose ORA output when working with well-justified, high-confidence gene lists or when sample size limitations prevent reliable ranking and permutation testing.
 
 ```R
