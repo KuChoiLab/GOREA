@@ -114,6 +114,8 @@ Output png file
 <img width="1249" alt="image" src="https://github.com/user-attachments/assets/3dd9eef9-8459-44e1-85a5-131c88a5a369" />
 
 ## Example #2.From fgsea to GOREA (Human)
+ORA and GSEA have fundamentally different approaches that can yield different results. ORA operates on pre-filtered gene lists based on user-defined significance thresholds. This approach may identify significant terms even with small gene overlaps; however, the results depend heavily on the chosen cutoffs for differential expression. GSEA, by contrast, analyzes the entire ranked gene list without the use of arbitrary thresholds. This method is particularly effective at detecting coordinated but modest expression changes that ORA might miss. We recommend users choose GSEA output for unbiased, pathway-level interpretation of genome-wide patterns, especially when effects are subtle or distributed across many genes, or choose ORA output when working with well-justified, high-confidence gene lists or when sample size limitations prevent reliable ranking and permutation testing.
+
 ```R
 library(dplyr)
 library(plyr)
@@ -130,12 +132,12 @@ library(fgsea)
 library(tibble)
 
 setwd("output path")
-source("path to GOREA/GOREA/human/gorea_function_human_GOBP_v2025.1_v1.2.R")
+source("path to GOREA/GOREA/human/gorea_function_human_GOBP_v2025.1_v1.4.R")
 
 # 1. Setting environment for analysis ----
 
-localdir <- "/Users/hojin/Dropbox/project/GOREA/v1.2/v2025.1" # this directory has to be parents directory of GeneOntology directory
-gorea_enviromnet(localdir)
+localdir <- "/Users/hojin/Dropbox/project/GOREA/v1.4/v2025.1" # this directory has to be parents directory of GeneOntology directory
+gorea_gobp_enviromnet(localdir)
 
 # 2. fgsea ----
 
@@ -187,6 +189,7 @@ res <- gorea(input = test1,
              score = "NES", # "NES" or "Overlap_freq"
              filename1 = paste0(celltype_tmp, "_nes_pos_table1.xlsx"),
              filename2 = paste0(celltype_tmp, "_nes_pos_table2.xlsx"),
+             filename3 = paste0(celltype_tmp, "_nes_pos_table3.xlsx"),
              heatmap_filename = paste0(celltype_tmp, "_nes_pos_plot.pdf"),
              plot = T,
              heatmap_width = 40, heatmap_height = 30,
@@ -207,6 +210,7 @@ res <- gorea(input = test2,
              score = "NES", # "NES" or "Overlap_freq"
              filename1 = paste0(celltype_tmp, "_nes_neg_table1.xlsx"),
              filename2 = paste0(celltype_tmp, "_nes_neg_table2.xlsx"),
+             filename3 = paste0(celltype_tmp, "_nes_neg_table3.xlsx"),
              heatmap_filename = paste0(celltype_tmp, "_nes_neg_plot.pdf"),
              plot = T,
              heatmap_width = 40, heatmap_height = 30,
