@@ -290,7 +290,7 @@ res <- gorea(input = input_df,
 ```
 
 
-## Example #4.GOCC and GOMF
+## Example #4. GOCC and GOMF
 To better understand the biological context, Gene Ontology Biological Process (GOBP) is commonly used by many users. However, some users may prefer to use Gene Ontology Molecular Function (GOMF) and Gene Ontology Cellular Component (GOCC). Therefore, we have enabled the analysis of GOMF and GOCC through the following code.
 
 
